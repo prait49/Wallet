@@ -26,8 +26,6 @@ public class WalletService {
        wallet.setBalance(wallet.getBalance() +amount);
         walletRepository.save(wallet);
 
-        wa
-
 
        return ;
     }
