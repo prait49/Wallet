@@ -15,7 +15,7 @@ public class Producer {
         this.kafkaTemplate = kafkaTemplate;
     }
 
-    public void sendWalletEvent(Wallet event) {
-        kafkaTemplate.send(TOPIC, event);
+    public void sendWalletEvent(String action, Wallet event) {
+        kafkaTemplate.send(TOPIC, action, event);
     }
 }

@@ -4,7 +4,6 @@ import com.example.kafka.producer.Producer;
 import com.example.wallet.models.Wallet;
 import com.example.wallet.repository.WalletRepository;
 import jakarta.persistence.EntityNotFoundException;
-
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Isolation;
@@ -21,13 +20,14 @@ public class WalletService {
 
     //Данный метод позволяет внести деньги на кошелек
     @Transactional(isolation = Isolation.READ_COMMITTED)
-    public Wallet depositMoney(int walletId, double amount){
-       Wallet wallet =walletRepository.findById(walletId).orElseThrow(() -> new EntityNotFoundException("Такого кошелька не существует"));
-       wallet.setBalance(wallet.getBalance() +amount);
+    public Wallet depositMoney(int walletId, double amount) {
+        Wallet wallet = walletRepository.findById(walletId).orElseThrow(() -> new EntityNotFoundException("Такого кошелька не существует"));
+        wallet.setBalance(wallet.getBalance() + amount);
         walletRepository.save(wallet);
 
+        producer.sendWalletEvent("deposit", wallet);
 
-       return ;
+        return wallet;
     }
 
     //Данный метод позволяет снять деньги с кошелька
@@ -39,11 +39,17 @@ public class WalletService {
             throw new IllegalArgumentException("Недостаточно средств на кошельке");
         }
         wallet.setBalance(newBalance);
-        return walletRepository.save(wallet);
+        walletRepository.save(wallet);
+
+        producer.sendWalletEvent("withdraw", wallet);
+
+        return wallet;
     }
 
     //Данный метод позволяет показать кошелек
-    public Wallet getWallet(int walletId){
-        return walletRepository.findById(walletId).orElseThrow(()-> new EntityNotFoundException("Такого кошелька не существует"));
+    public Wallet getWallet(int walletId) {
+        Wallet wallet = walletRepository.findById(walletId).orElseThrow(() -> new EntityNotFoundException("Такого кошелька не существует"));
+
+        return wallet;
     }
 }
