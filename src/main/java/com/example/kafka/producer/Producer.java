@@ -16,6 +16,7 @@ public class Producer {
     }
 
     public void sendWalletEvent(String action, Wallet event) {
+        System.out.println("Продюсер используется");
         kafkaTemplate.send(TOPIC, action, event);
     }
 }

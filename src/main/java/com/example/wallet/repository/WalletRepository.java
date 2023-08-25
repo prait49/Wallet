@@ -13,4 +13,6 @@ public interface WalletRepository extends JpaRepository<Wallet,Integer> {
 
     @Lock(LockModeType.PESSIMISTIC_WRITE)
     Optional<Wallet> findById(Integer integer);
+
+    Optional<Wallet>findAllById(Integer integer);
 }

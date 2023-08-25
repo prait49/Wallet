@@ -48,8 +48,6 @@ public class WalletService {
 
     //Данный метод позволяет показать кошелек
     public Wallet getWallet(int walletId) {
-        Wallet wallet = walletRepository.findById(walletId).orElseThrow(() -> new EntityNotFoundException("Такого кошелька не существует"));
-
-        return wallet;
+        return walletRepository.findAllById(walletId).orElseThrow(() -> new EntityNotFoundException("Такого кошелька не существует"));
     }
 }

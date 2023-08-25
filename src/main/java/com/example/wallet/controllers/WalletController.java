@@ -15,7 +15,6 @@ public class WalletController {
     private final WalletService walletService;
 
 
-
     @PostMapping("/{walletId}/deposit")
     public Wallet depositMoney(@PathVariable int walletId, @RequestParam double amount){
         return walletService.depositMoney(walletId, amount);
